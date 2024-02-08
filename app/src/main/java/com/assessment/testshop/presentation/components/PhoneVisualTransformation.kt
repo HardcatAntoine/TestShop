@@ -1,4 +1,4 @@
-package com.assessment.testshop.domain
+package com.assessment.testshop.presentation.components
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
-class PhoneVisualTransformationUseCase(val mask: String, val maskNumber: Char):VisualTransformation {
+class PhoneVisualTransformation(val mask: String, val maskNumber: Char): VisualTransformation {
     private val maxLength = mask.count { it == maskNumber }
 
     override fun filter(text: AnnotatedString): TransformedText {
@@ -33,7 +33,7 @@ class PhoneVisualTransformationUseCase(val mask: String, val maskNumber: Char):V
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is PhoneVisualTransformationUseCase) return false
+        if (other !is PhoneVisualTransformation) return false
         if (mask != other.mask) return false
         if (maskNumber != other.maskNumber) return false
         return true
@@ -43,7 +43,6 @@ class PhoneVisualTransformationUseCase(val mask: String, val maskNumber: Char):V
         return mask.hashCode()
     }
 }
-
 private class PhoneOffsetMapper(val mask: String, val numberChar: Char) : OffsetMapping {
 
     override fun originalToTransformed(offset: Int): Int {

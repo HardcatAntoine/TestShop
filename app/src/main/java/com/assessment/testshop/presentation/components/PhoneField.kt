@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.assessment.testshop.domain.PhoneVisualTransformationUseCase
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,5 +49,6 @@ fun PhoneField(
             Log.d("NUMBER", it.length.toString())
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-        visualTransformation = PhoneVisualTransformationUseCase(mask, maskNumber))
+        visualTransformation = PhoneVisualTransformation(mask, maskNumber)
+    )
 }
