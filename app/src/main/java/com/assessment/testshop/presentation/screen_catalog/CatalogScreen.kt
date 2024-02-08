@@ -1,5 +1,7 @@
 package com.assessment.testshop.presentation.screen_catalog
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,8 +20,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -34,11 +36,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.assessment.testshop.R
 import com.assessment.testshop.domain.models.Product
 
 @Composable
@@ -98,14 +101,15 @@ fun ProductsCatalogItem(
         modifier = Modifier
             .size(width = 168.dp, height = 287.dp)
             .padding(4.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
         onClick = { onItemClick(product) }
     ) {
         Box(
-            modifier = Modifier.size(width = 168.dp, height = 144.dp),
+            modifier = Modifier.size(width = 168.dp, height = 144.dp).background(Color.White),
         ) {
-            Icon(
+            Image(
                 modifier = Modifier.fillMaxSize(),
-                imageVector = Icons.Outlined.Home,
+                painter = painterResource(id = product.imageRes),
                 contentDescription = "Product Image"
             )
             IconButton(
@@ -118,12 +122,24 @@ fun ProductsCatalogItem(
                 )
             }
         }
-        Column(modifier = Modifier.padding(8.dp)) {
-            Text(
-                text = product.price.priceWithDiscount,
-                fontSize = 9.sp,
-                style = TextStyle(textDecoration = TextDecoration.LineThrough)
+        Column(modifier = Modifier.padding(8.dp).background(Color.White)) {
+            Icon(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                painter = painterResource(id = R.drawable.pagination),
+                contentDescription = "pagination"
             )
+            Box(modifier = Modifier.padding(top = 2.dp)) {
+                Text(
+                    text = "${product.price.priceWithDiscount} ${product.price.unit}",
+                    fontSize = 9.sp,
+                )
+                Image(
+                    modifier = Modifier.padding(top = 4.dp),
+                    painter = painterResource(id = R.drawable.discount_line),
+                    contentDescription = "discount_line"
+                )
+            }
+
             Text(
                 text = product.price.price,
                 fontSize = 14.sp
