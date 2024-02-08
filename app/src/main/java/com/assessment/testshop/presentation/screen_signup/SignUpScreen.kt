@@ -11,9 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,24 +29,26 @@ import com.assessment.testshop.presentation.theme.TextGrey
 @Composable
 fun SignUpScreen(onClick: () -> Unit) {
     val viewModel: SignUpViewModel = hiltViewModel()
-    val pattern = remember { Regex("[А-Яа-яЁё]+") }
-    val name = remember { mutableStateOf("") }
-    val secondName = remember { mutableStateOf("") }
-    val number = remember { mutableStateOf("") }
-    val enabledButton by remember { viewModel.enable }
+    val uiState = viewModel.uiState.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         Box(modifier = Modifier.padding(top = 150.dp)) {
             Column {
-                NameField(hint = "Имя", name = name, pattern = pattern)
-                NameField(hint = "Фамилия", name = secondName, pattern = pattern)
-                PhoneField(phone = number, onPhoneChanged = { number.value = it })
+                NameField(
+                    hint = "Имя",
+                    isError = !uiState.value.isFirstNameValid,
+                    onTextChanged = { viewModel.validateFirstName(it) })
+                NameField(
+                    hint = "Фамилия",
+                    isError = !uiState.value.isLastNameValid,
+                    onTextChanged = { viewModel.validateLastName(it) })
+                PhoneField(onPhoneChanged = { viewModel.validateSignUpForm(it) })
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp, top = 8.dp),
                     shape = RoundedCornerShape(8.dp),
-                    enabled = enabledButton,
+                    enabled = uiState.value.isButtonEnabled,
                     colors = ButtonDefaults.buttonColors(
                         EnabledButton,
                         Color.White,
@@ -81,7 +81,6 @@ fun SignUpScreen(onClick: () -> Unit) {
 
         }
     }
-    viewModel.enabledButton(name.value, secondName.value, number.value)
 }
 
 
