@@ -15,7 +15,12 @@ class SignUpViewModel @Inject constructor(
 
     private val pattern = Regex("[А-Яа-яЁё]+")
 
+    private var firstName: String = ""
+    private var lastName: String = ""
+    private var phoneNumber: String = ""
+
     fun validateFirstName(firstName: String) {
+        this.firstName = firstName
         when {
             firstName.matches(pattern) -> _uiState.update { it.toFirstNameValid() }
             else -> _uiState.update { it.toFirstNameInvalid() }
@@ -23,15 +28,23 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun validateLastName(lastName: String) {
+        this.lastName = lastName
         when {
             lastName.matches(pattern) -> _uiState.update { it.toLastNameValid() }
             else -> _uiState.update { it.toLasNameInvalid() }
         }
     }
+    fun validatePhoneNumber(phoneNumber:String){
+        this.phoneNumber = phoneNumber
+    }
 
-    fun validateSignUpForm(phoneNumber: String) {
+    fun validateSignUpForm() {
+        if (firstName == "") _uiState.update { it.toFirstNameInvalid() }
+        if (lastName == "") _uiState.update { it.toLasNameInvalid() }
         if (phoneNumber.length >= 10 && _uiState.value.isFirstNameValid && _uiState.value.isLastNameValid) {
             _uiState.update { it.toValidState() }
+        }else{
+            _uiState.update { it.toInitState() }
         }
     }
 }

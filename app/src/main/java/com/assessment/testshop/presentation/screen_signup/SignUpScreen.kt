@@ -37,12 +37,21 @@ fun SignUpScreen(onClick: () -> Unit) {
                 NameField(
                     hint = "Имя",
                     isError = !uiState.value.isFirstNameValid,
-                    onTextChanged = { viewModel.validateFirstName(it) })
+                    onTextChanged = {
+                        viewModel.validateFirstName(it)
+                        viewModel.validateSignUpForm()
+                    })
                 NameField(
                     hint = "Фамилия",
                     isError = !uiState.value.isLastNameValid,
-                    onTextChanged = { viewModel.validateLastName(it) })
-                PhoneField(onPhoneChanged = { viewModel.validateSignUpForm(it) })
+                    onTextChanged = {
+                        viewModel.validateLastName(it)
+                        viewModel.validateSignUpForm()
+                    })
+                PhoneField(onPhoneChanged = {
+                    viewModel.validatePhoneNumber(it)
+                    viewModel.validateSignUpForm()
+                })
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()

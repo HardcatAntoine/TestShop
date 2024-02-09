@@ -41,6 +41,7 @@ fun PhoneField(
         trailingIcon = {
             TrailingIcon(text = phoneNumber.value) {
                 phoneNumber.value = ""
+                onPhoneChanged(phoneNumber.value)
             }
         },
         singleLine = true,

@@ -35,6 +35,7 @@ fun NameField(
         trailingIcon = {
             TrailingIcon(text = name.value) {
                 name.value = ""
+                onTextChanged(name.value)
             }
         },
         isError = if (name.value.isBlank()) {
