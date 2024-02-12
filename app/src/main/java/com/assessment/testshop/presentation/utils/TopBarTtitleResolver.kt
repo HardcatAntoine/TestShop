@@ -10,6 +10,7 @@ fun resolveTitle(route: String): String {
         Route.CART.name -> "Корзина"
         Route.SALES.name -> "Акции"
         Route.PROFILE.name -> "Профиль"
+        Route.PRODUCT_DETAILS.name -> "Детали"
         else -> ""
     }
 }
