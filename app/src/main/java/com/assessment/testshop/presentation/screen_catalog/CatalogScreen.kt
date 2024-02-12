@@ -42,13 +42,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.assessment.testshop.domain.models.Product
 
 @Composable
-fun CatalogScreen() {
+fun CatalogScreen(onItemClick: (String) -> Unit) {
     val viewModel: CatalogViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     CatalogScreenContent(
         uiState,
-        onItemClick = {/*TODO*/ },
+        onItemClick = { onItemClick(it) },
         onFavoriteClick = {/*TODO*/ },
         onAddToCartClick = {/*TODO*/ },
         onFilterChipClick = { filterTag -> viewModel.filterProducts(filterTag) },
@@ -58,7 +58,7 @@ fun CatalogScreen() {
 @Composable
 fun CatalogScreenContent(
     products: List<Product>,
-    onItemClick: (Product) -> Unit,
+    onItemClick: (String) -> Unit,
     onFavoriteClick: (Product) -> Unit,
     onAddToCartClick: (Product) -> Unit,
     onFilterChipClick: (String) -> Unit,
@@ -90,7 +90,7 @@ fun CatalogScreenContent(
 @Composable
 fun ProductsCatalogItem(
     product: Product,
-    onItemClick: (Product) -> Unit,
+    onItemClick: (String) -> Unit,
     onFavoriteClick: (Product) -> Unit,
     onAddToCartClick: (Product) -> Unit,
 ) {
@@ -98,7 +98,7 @@ fun ProductsCatalogItem(
         modifier = Modifier
             .size(width = 168.dp, height = 287.dp)
             .padding(4.dp),
-        onClick = { onItemClick(product) }
+        onClick = { onItemClick(product.id) }
     ) {
         Box(
             modifier = Modifier.size(width = 168.dp, height = 144.dp),
