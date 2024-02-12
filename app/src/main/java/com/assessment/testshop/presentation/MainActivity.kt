@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.assessment.testshop.presentation.components.TestShopBottomTabRow
 import com.assessment.testshop.presentation.navigation.Route
 import com.assessment.testshop.presentation.navigation.SignUpDestination
-import com.assessment.testshop.presentation.navigation.TestShopHavHost
+import com.assessment.testshop.presentation.navigation.TestShopNavHost
 import com.assessment.testshop.presentation.navigation.navigateSingleTopTo
 import com.assessment.testshop.presentation.navigation.testShopBottomNavScreens
 import com.assessment.testshop.presentation.theme.TestShopTheme
@@ -68,7 +68,7 @@ fun TestShopApp() {
                 }
             }
         ) { padding ->
-            TestShopHavHost(navController = navController, modifier = Modifier.padding(padding))
+            TestShopNavHost(navController = navController, modifier = Modifier.padding(padding))
         }
     }
 }

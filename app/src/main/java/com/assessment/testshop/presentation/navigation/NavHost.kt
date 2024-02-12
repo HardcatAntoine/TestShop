@@ -14,7 +14,7 @@ import com.assessment.testshop.presentation.screen_sales.SalesScreen
 import com.assessment.testshop.presentation.screen_signup.SignUpScreen
 
 @Composable
-fun TestShopHavHost(
+fun TestShopNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
