@@ -50,13 +50,13 @@ import com.assessment.testshop.presentation.theme.EnabledButton
 import com.assessment.testshop.presentation.theme.RatingText
 
 @Composable
-fun CatalogScreen() {
+fun CatalogScreen(onItemClick: (String) -> Unit) {
     val viewModel: CatalogViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     CatalogScreenContent(
         uiState,
-        onItemClick = {/*TODO*/ },
+        onItemClick = { onItemClick(it.id)},
         onFavoriteClick = {/*TODO*/ },
         onAddToCartClick = {/*TODO*/ },
         onFilterChipClick = { filterTag -> viewModel.filterProducts(filterTag) },

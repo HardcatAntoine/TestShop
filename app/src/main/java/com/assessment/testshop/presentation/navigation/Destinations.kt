@@ -41,7 +41,7 @@ object ProfileDestination : Destination {
 }
 object ProductDetailsDestination:Destination{
     override val route: String = Route.PRODUCT_DETAILS.name
-    override val icon: ImageVector = Icons.Outlined.Person
+    override val icon: Int = R.drawable.ic_catalog
 
 
 }
