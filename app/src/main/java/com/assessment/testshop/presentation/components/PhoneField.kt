@@ -11,6 +11,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
@@ -20,11 +22,12 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhoneField(
-    phone: MutableState<String>,
     mask: String = "+7 (000) 000-00-00",
     maskNumber: Char = '0',
     onPhoneChanged: (String) -> Unit
 ) {
+
+    val phoneNumber = remember { mutableStateOf("") }
     TextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,16 +39,19 @@ fun PhoneField(
             disabledTextColor = Color.Transparent,
         ),
         trailingIcon = {
-            TrailingIcon(text = phone.value) {
-                phone.value = ""
+            TrailingIcon(text = phoneNumber.value) {
+                phoneNumber.value = ""
+                onPhoneChanged(phoneNumber.value)
             }
         },
         singleLine = true,
         shape = RoundedCornerShape(8.dp),
         placeholder = { Text(text = "Номер телефона") },
-        value = phone.value,
+        value = phoneNumber.value,
         onValueChange = { it ->
-            onPhoneChanged(it.take(mask.count { it == maskNumber }))
+            val formattedPhoneNumber = it.take(mask.count { it == maskNumber })
+            onPhoneChanged(formattedPhoneNumber)
+            phoneNumber.value = formattedPhoneNumber
             Log.d("NUMBER", it.length.toString())
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),

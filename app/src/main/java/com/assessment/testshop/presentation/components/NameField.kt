@@ -8,7 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -17,23 +18,30 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun NameField(
     hint: String,
-    name: MutableState<String>,
-    pattern: Regex,
+    isError: Boolean,
+    onTextChanged: (String) -> Unit,
 ) {
+    val name = remember { mutableStateOf("") }
+
     TextField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 8.dp),
         value = name.value,
         onValueChange = {
-            if (it.matches(pattern)) {
-                name.value = it
-            }
+            name.value = it
+            onTextChanged(it)
         },
         trailingIcon = {
             TrailingIcon(text = name.value) {
                 name.value = ""
+                onTextChanged(name.value)
             }
+        },
+        isError = if (name.value.isBlank()) {
+            false
+        } else {
+            isError
         },
         singleLine = true,
         shape = RoundedCornerShape(8.dp),
