@@ -3,25 +3,24 @@ package com.assessment.testshop.presentation.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -68,15 +67,24 @@ private fun TestShopBottomTab(
     onSelected: () -> Unit,
     selected: Boolean
 ) {
+    val formattedTitle = when (text) {
+        "MAIN" -> "Главная"
+        "CATALOG" -> "Каталог"
+        "CART" -> "Корзина"
+        "SALES" -> "Акции"
+        "PROFILE" -> "Профиль"
+        else -> ""
+    }
     val color = EnabledButton
     val tabTintColor by animateColorAsState(
-        targetValue = if (selected) color else TextGrey,
+        targetValue = if (selected) color else Color.Black,
         label = ""
     )
-    Column {
+    Box {
         Icon(
             modifier = Modifier
                 .fillMaxHeight()
+                .align(Alignment.Center)
                 .selectable(
                     selected = selected,
                     onClick = onSelected,
@@ -93,9 +101,17 @@ private fun TestShopBottomTab(
             contentDescription = text,
             tint = tabTintColor
         )
-        Text(text = text, style = TextStyle(tabTintColor), fontSize = 10.sp)
+        Text(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 2.dp),
+            text = formattedTitle,
+            style = TextStyle(tabTintColor),
+            fontSize = 10.sp
+        )
     }
 
 }
 
 private val TabHeight = 56.dp
+
