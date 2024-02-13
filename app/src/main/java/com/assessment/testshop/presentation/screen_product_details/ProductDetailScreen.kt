@@ -26,6 +26,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -102,31 +105,7 @@ fun ProductDetailContent(product: Product) {
             style = TextStyle(TextGrey),
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                modifier = Modifier.size(15.dp),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "Rating"
-            )
-            Icon(
-                modifier = Modifier.size(15.dp),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "Rating"
-            )
-            Icon(
-                modifier = Modifier.size(15.dp),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "Rating"
-            )
-            Icon(
-                modifier = Modifier.size(15.dp),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "Rating"
-            )
-            Icon(
-                modifier = Modifier.size(15.dp),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "Rating"
-            )
+            SetRatingStarIconState(rating = product.feedback.rating)
             Spacer(modifier = Modifier.size(2.dp))
             Text(text = "${product.feedback.rating}", style = TextStyle())
             Spacer(modifier = Modifier.size(8.dp))
@@ -242,6 +221,105 @@ fun ProductDetailContent(product: Product) {
             }
         }
     }
+}
+
+@Composable
+fun SetRatingStarIconState(rating: Double) {
+    var firstStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
+    var secondStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
+    var thirdStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
+    var fourthStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
+    var fifthStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
+    when {
+        rating > 0 && rating < 1 -> {
+            firstStarUIState = R.drawable.ic_half_star
+        }
+
+        rating > 1 && rating < 2 -> {
+            firstStarUIState = R.drawable.ic_full_star
+            secondStarUIState = R.drawable.ic_half_star
+        }
+
+        rating > 2 && rating < 3 -> {
+            firstStarUIState = R.drawable.ic_full_star
+            secondStarUIState = R.drawable.ic_full_star
+            thirdStarUIState = R.drawable.ic_half_star
+        }
+
+        rating > 3 && rating < 4 -> {
+            firstStarUIState = R.drawable.ic_full_star
+            secondStarUIState = R.drawable.ic_full_star
+            thirdStarUIState = R.drawable.ic_full_star
+            fourthStarUIState = R.drawable.ic_half_star
+        }
+
+        rating > 4 && rating < 5 -> {
+            firstStarUIState = R.drawable.ic_full_star
+            secondStarUIState = R.drawable.ic_full_star
+            thirdStarUIState = R.drawable.ic_full_star
+            fourthStarUIState = R.drawable.ic_full_star
+            fifthStarUIState = R.drawable.ic_half_star
+        }
+
+        rating == 1.0 -> {
+            firstStarUIState = R.drawable.ic_full_star
+        }
+
+        rating == 2.0 -> {
+            firstStarUIState = R.drawable.ic_full_star
+            secondStarUIState = R.drawable.ic_full_star
+        }
+
+        rating == 3.0 -> {
+            firstStarUIState = R.drawable.ic_full_star
+            secondStarUIState = R.drawable.ic_full_star
+            thirdStarUIState = R.drawable.ic_full_star
+        }
+
+        rating == 4.0 -> {
+            firstStarUIState = R.drawable.ic_full_star
+            secondStarUIState = R.drawable.ic_full_star
+            thirdStarUIState = R.drawable.ic_full_star
+            fourthStarUIState = R.drawable.ic_full_star
+        }
+
+        rating == 5.0 -> {
+            firstStarUIState = R.drawable.ic_full_star
+            secondStarUIState = R.drawable.ic_full_star
+            thirdStarUIState = R.drawable.ic_full_star
+            fourthStarUIState = R.drawable.ic_full_star
+            fifthStarUIState = R.drawable.ic_full_star
+        }
+
+    }
+    Row (verticalAlignment = Alignment.CenterVertically){
+        Icon(
+            modifier = Modifier.size(15.dp),
+            painter = painterResource(id = firstStarUIState),
+            contentDescription = "Rating"
+        )
+        Icon(
+            modifier = Modifier.size(15.dp),
+            painter = painterResource(id = secondStarUIState),
+            contentDescription = "Rating"
+        )
+        Icon(
+            modifier = Modifier.size(15.dp),
+            painter = painterResource(id = thirdStarUIState),
+            contentDescription = "Rating"
+        )
+        Icon(
+            modifier = Modifier.size(15.dp),
+            painter = painterResource(id = fourthStarUIState),
+            contentDescription = "Rating"
+        )
+        Icon(
+            modifier = Modifier.size(15.dp),
+            painter = painterResource(id = fifthStarUIState),
+            contentDescription = "Rating"
+        )
+    }
+
 }
 
 
