@@ -4,5 +4,5 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 interface Destination {
     val route: String
-    val icon: ImageVector
+    val icon: Int
 }
