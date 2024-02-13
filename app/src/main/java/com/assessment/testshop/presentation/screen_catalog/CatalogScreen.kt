@@ -126,12 +126,16 @@ fun ProductsCatalogItem(
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Favorite button"
+                    painter = painterResource(id = R.drawable.ic_half_favorite),
+                    contentDescription = "Favorite button",
+                    tint = EnabledButton
                 )
             }
         }
-        Box(Modifier.fillMaxSize().background(Color.White)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
