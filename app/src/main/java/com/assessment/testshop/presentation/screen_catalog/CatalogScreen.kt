@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assessment.testshop.R
 import com.assessment.testshop.domain.models.Product
+import com.assessment.testshop.presentation.theme.DisabledButton
 import com.assessment.testshop.presentation.theme.EnabledButton
 import com.assessment.testshop.presentation.theme.RatingText
 
@@ -130,7 +131,7 @@ fun ProductsCatalogItem(
                 )
             }
         }
-        Box {
+        Box(Modifier.fillMaxSize().background(Color.White)) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -183,16 +184,15 @@ fun ProductsCatalogItem(
                     Spacer(modifier = Modifier.size(2.dp))
                     Text(text = "(${product.feedback.count})", fontSize = 9.sp)
                 }
-                IconButton(
-                    onClick = { onAddToCartClick(product) },
-                    modifier = Modifier
-                        .size(32.dp)
-                        .align(Alignment.End)
-                ) {
-                    Image(painter = painterResource(id = R.drawable.add_product_button), contentDescription = "Add to cart button")
-                }
-
             }
+            Image(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .clickable { onAddToCartClick(product) }
+                    .size(32.dp),
+                painter = painterResource(id = R.drawable.add_product_button),
+                contentDescription = "Add to cart button"
+            )
         }
     }
 }
