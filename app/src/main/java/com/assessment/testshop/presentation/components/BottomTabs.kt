@@ -3,28 +3,36 @@ package com.assessment.testshop.presentation.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.assessment.testshop.presentation.navigation.Destination
+import com.assessment.testshop.presentation.theme.EnabledButton
+import com.assessment.testshop.presentation.theme.TextGrey
 
 @Composable
 fun TestShopBottomTabRow(
@@ -56,36 +64,38 @@ fun TestShopBottomTabRow(
 @Composable
 private fun TestShopBottomTab(
     text: String,
-    icon: ImageVector,
+    icon: Int,
     onSelected: () -> Unit,
     selected: Boolean
 ) {
-    val color = MaterialTheme.colorScheme.onSurface
+    val color = EnabledButton
     val tabTintColor by animateColorAsState(
-        targetValue = if (selected) color else color.copy(alpha = InactiveTabOpacity),
+        targetValue = if (selected) color else TextGrey,
         label = ""
     )
-
-    Icon(
-        modifier = Modifier
-            .fillMaxHeight()
-            .selectable(
-                selected = selected,
-                onClick = onSelected,
-                role = Role.Tab,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(
-                    bounded = false,
-                    radius = Dp.Unspecified,
-                    color = Color.Unspecified
+    Column {
+        Icon(
+            modifier = Modifier
+                .fillMaxHeight()
+                .selectable(
+                    selected = selected,
+                    onClick = onSelected,
+                    role = Role.Tab,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(
+                        bounded = false,
+                        radius = Dp.Unspecified,
+                        color = Color.Unspecified
+                    )
                 )
-            )
-            .clearAndSetSemantics { contentDescription = text },
-        imageVector = icon,
-        contentDescription = text,
-        tint = tabTintColor
-    )
+                .clearAndSetSemantics { contentDescription = text },
+            painter = painterResource(id = icon),
+            contentDescription = text,
+            tint = tabTintColor
+        )
+        Text(text = text, style = TextStyle(tabTintColor), fontSize = 10.sp)
+    }
+
 }
 
 private val TabHeight = 56.dp
-private const val InactiveTabOpacity = 0.60f
