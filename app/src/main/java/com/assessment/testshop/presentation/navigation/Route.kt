@@ -6,5 +6,6 @@ enum class Route {
     MAIN,
     CART,
     SALES,
-    PROFILE
+    PROFILE,
+    PRODUCT_DETAILS
 }
