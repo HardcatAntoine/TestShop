@@ -1,11 +1,15 @@
 package com.assessment.testshop.presentation.screen_catalog
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,10 +20,9 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -34,12 +37,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.assessment.testshop.R
 import com.assessment.testshop.domain.models.Product
+import com.assessment.testshop.presentation.theme.EnabledButton
+import com.assessment.testshop.presentation.theme.RatingText
 
 @Composable
 fun CatalogScreen() {
@@ -97,15 +104,20 @@ fun ProductsCatalogItem(
     Card(
         modifier = Modifier
             .size(width = 168.dp, height = 287.dp)
-            .padding(4.dp),
+            .padding(4.dp)
+            .background(Color.White),
+        elevation = CardDefaults.cardElevation(6.dp),
         onClick = { onItemClick(product) }
     ) {
         Box(
-            modifier = Modifier.size(width = 168.dp, height = 144.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(144.dp)
+                .background(Color.White),
         ) {
-            Icon(
+            Image(
                 modifier = Modifier.fillMaxSize(),
-                imageVector = Icons.Outlined.Home,
+                painter = painterResource(id = product.imageRes),
                 contentDescription = "Product Image"
             )
             IconButton(
@@ -118,48 +130,69 @@ fun ProductsCatalogItem(
                 )
             }
         }
-        Column(modifier = Modifier.padding(8.dp)) {
-            Text(
-                text = product.price.priceWithDiscount,
-                fontSize = 9.sp,
-                style = TextStyle(textDecoration = TextDecoration.LineThrough)
-            )
-            Text(
-                text = product.price.price,
-                fontSize = 14.sp
-            )
-            Text(
-                text = product.title,
-                fontSize = 12.sp
-            )
-            Text(
-                modifier = Modifier.height(37.dp),
-                text = product.subtitle,
-                fontSize = 10.sp,
-                maxLines = 3,
-                style = MaterialTheme.typography.bodySmall,
-                lineHeight = 10.sp
-            )
-            Row {
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(start = 8.dp)
+            ) {
                 Icon(
-                    imageVector = Icons.Filled.Star,
-                    contentDescription = "Feedback score icon",
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    painter = painterResource(id = R.drawable.pagination),
+                    contentDescription = "pagination"
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                Text(text = "${product.feedback.rating}", fontSize = 9.sp)
-                Spacer(modifier = Modifier.size(2.dp))
-                Text(text = "(${product.feedback.count})", fontSize = 9.sp)
-            }
-        }
+                Box(modifier = Modifier.padding(top = 2.dp)) {
+                    Text(
+                        text = "${product.price.priceWithDiscount} ${product.price.unit}",
+                        fontSize = 9.sp,
+                    )
+                    Image(
+                        modifier = Modifier.padding(top = 4.dp),
+                        painter = painterResource(id = R.drawable.discount_line),
+                        contentDescription = "discount_line"
+                    )
+                }
 
-        IconButton(
-            onClick = { onAddToCartClick(product) },
-            modifier = Modifier
-                .align(Alignment.End)
-                .size(32.dp),
-        ) {
-            Icon(imageVector = Icons.Filled.Add, contentDescription = "Add to cart button")
+                Text(
+                    text = "${product.price.price} ${product.price.unit}",
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = product.title,
+                    fontSize = 12.sp
+                )
+                Text(
+                    modifier = Modifier
+                        .height(37.dp)
+                        .padding(end = 8.dp),
+                    text = product.subtitle,
+                    fontSize = 10.sp,
+                    maxLines = 3,
+                    style = MaterialTheme.typography.bodySmall,
+                    lineHeight = 10.sp
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_full_star),
+                        contentDescription = "Feedback score icon",
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.size(2.dp))
+                    Text(text = "${product.feedback.rating}", fontSize = 9.sp, color = RatingText)
+                    Spacer(modifier = Modifier.size(2.dp))
+                    Text(text = "(${product.feedback.count})", fontSize = 9.sp)
+                }
+                IconButton(
+                    onClick = { onAddToCartClick(product) },
+                    modifier = Modifier
+                        .size(32.dp)
+                        .align(Alignment.End)
+                ) {
+                    Image(painter = painterResource(id = R.drawable.add_product_button), contentDescription = "Add to cart button")
+                }
+
+            }
         }
     }
 }
