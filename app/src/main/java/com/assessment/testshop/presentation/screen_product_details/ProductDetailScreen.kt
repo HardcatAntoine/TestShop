@@ -2,6 +2,7 @@ package com.assessment.testshop.presentation.screen_product_details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,13 +27,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assessment.testshop.R
 import com.assessment.testshop.domain.models.Product
 import com.assessment.testshop.presentation.components.FiveStarRating
-import com.assessment.testshop.presentation.theme.ButtonBackInvisible
 import com.assessment.testshop.presentation.theme.ButtonGrey
 import com.assessment.testshop.presentation.theme.EnabledButton
 import com.assessment.testshop.presentation.theme.TextGrey
@@ -185,9 +185,10 @@ fun ProductDetailContent(product: Product) {
         }
         item {
             Text(
-                modifier = Modifier.padding(top = 24.dp, bottom = 16.dp),
+                modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
                 text = "Описание",
-                fontSize = 16.sp
+                fontSize = 20.sp,
+                fontWeight = FontWeight(600)
             )
         }
         item {
@@ -217,19 +218,17 @@ fun ProductDetailContent(product: Product) {
             Text(modifier = Modifier.padding(top = 8.dp), text = product.description)
         }
         item {
-            Button(
-                modifier = Modifier.padding(top = 4.dp),
-                colors = ButtonDefaults.buttonColors(ButtonBackInvisible),
-                onClick = {}
-            ) {
-                Text(text = "Скрыть", fontSize = 14.sp, style = TextStyle(TextGrey))
-            }
+            Text(
+                modifier = Modifier.clickable { }.padding(top = 8.dp),
+                text = "Скрыть", fontSize = 14.sp, style = TextStyle(TextGrey)
+            )
         }
         item {
             Text(
                 modifier = Modifier.padding(top = 24.dp),
                 text = "Характеристики",
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                fontWeight = FontWeight(600)
             )
         }
         items(product.info) {
@@ -245,33 +244,36 @@ fun ProductDetailContent(product: Product) {
         }
         item {
             Row(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(top = 24.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Состав", fontSize = 20.sp)
+                Text(text = "Состав", fontSize = 20.sp, fontWeight = FontWeight(600))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_copy),
                     contentDescription = "Copy",
                     tint = TextGrey
                 )
             }
+
+
         }
         item {
             Text(modifier = Modifier.padding(top = 8.dp), text = product.ingredients, maxLines = 2)
         }
         item {
-            Button(
-                modifier = Modifier,
-                colors = ButtonDefaults.buttonColors(ButtonBackInvisible),
-                onClick = {}
-            ) {
-                Text(text = "Подробнее", fontSize = 14.sp, style = TextStyle(TextGrey))
-            }
+            Text(
+                modifier = Modifier.clickable { }.padding(top = 8.dp),
+                text = "Подробнее", fontSize = 14.sp, style = TextStyle(TextGrey)
+            )
         }
         item {
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
+                shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(EnabledButton),
                 onClick = {}
             ) {
@@ -284,10 +286,8 @@ fun ProductDetailContent(product: Product) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = "${product.price.priceWithDiscount} ${product.price.unit}",
-                                fontSize = 24.sp,
-                                style = TextStyle(
-                                    Color.White
-                                )
+                                fontSize = 20.sp,
+                                style = TextStyle(Color.White)
                             )
                             Spacer(modifier = Modifier.size(8.dp))
                             Box {
