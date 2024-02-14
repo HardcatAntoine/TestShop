@@ -157,10 +157,10 @@ fun ProductDetailContent(product: Product) {
                     fontSize = 24.sp
                 )
                 Spacer(modifier = Modifier.size(8.dp))
-                Box {
+                Box(modifier = Modifier.padding(top = 2.dp),) {
                     Text(
                         text = "${product.price.price} ${product.price.unit}",
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         style = TextStyle(TextGrey)
                     )
                     Image(
@@ -173,7 +173,7 @@ fun ProductDetailContent(product: Product) {
                 Box(
                     Modifier
                         .background(EnabledButton)
-                        .clip(RoundedCornerShape(4.dp))
+                        .padding(top = 2.dp)
                 ) {
                     Text(
                         text = "-${product.price.discount}%",
