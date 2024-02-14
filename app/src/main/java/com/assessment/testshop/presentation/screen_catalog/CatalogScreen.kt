@@ -179,7 +179,7 @@ fun ProductsCatalogItem(
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_full_star),
+                        painter = painterResource(id = R.drawable.star_filled),
                         contentDescription = "Feedback score icon",
                         modifier = Modifier.size(16.dp)
                     )
