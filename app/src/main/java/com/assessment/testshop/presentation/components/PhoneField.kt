@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhoneField(
-    mask: String = "+7 (000) 000-00-00",
-    maskNumber: Char = '0',
     onPhoneChanged: (String) -> Unit
 ) {
 
@@ -49,12 +47,12 @@ fun PhoneField(
         placeholder = { Text(text = "Номер телефона") },
         value = phoneNumber.value,
         onValueChange = { it ->
-            val formattedPhoneNumber = it.take(mask.count { it == maskNumber })
+            val formattedPhoneNumber = it.take(MASK.count { it == MASK_NUMBER })
             onPhoneChanged(formattedPhoneNumber)
             phoneNumber.value = formattedPhoneNumber
             Log.d("NUMBER", it.length.toString())
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-        visualTransformation = PhoneVisualTransformation(mask, maskNumber)
+        visualTransformation = PhoneVisualTransformation(MASK, MASK_NUMBER)
     )
 }
