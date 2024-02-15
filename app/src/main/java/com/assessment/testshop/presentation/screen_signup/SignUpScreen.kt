@@ -66,6 +66,7 @@ fun SignUpScreen(onClick: () -> Unit) {
                     ),
                     onClick = {
                         onClick()
+                        viewModel.savePerson()
                     }) {
                     Text(text = "Войти")
                 }
