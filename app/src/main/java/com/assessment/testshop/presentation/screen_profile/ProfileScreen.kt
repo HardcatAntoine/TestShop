@@ -14,10 +14,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assessment.testshop.R
 import com.assessment.testshop.data.local.Person
+import com.assessment.testshop.presentation.components.MASK
+import com.assessment.testshop.presentation.components.MASK_NUMBER
+import com.assessment.testshop.presentation.components.PhoneVisualTransformation
 import com.assessment.testshop.presentation.theme.ButtonGrey
 import com.assessment.testshop.presentation.theme.EnabledButton
 import com.assessment.testshop.presentation.theme.IconPerson
@@ -41,6 +46,11 @@ fun ProfileScreen() {
 
 @Composable
 fun ProfileScreenContent(savedPerson: Person) {
+    val formattedPhoneNumber =
+        PhoneVisualTransformation(
+            MASK, MASK_NUMBER
+        ).filter(AnnotatedString(savedPerson.phoneNumber))
+
     Column(modifier = Modifier.padding(8.dp)) {
         Button(modifier = Modifier
             .fillMaxWidth()
@@ -59,9 +69,12 @@ fun ProfileScreenContent(savedPerson: Person) {
                             contentDescription = "person", tint = IconPerson
                         )
                         Column(modifier = Modifier.padding(start = 8.dp)) {
-                            Text(text = "${savedPerson.firstName} ${savedPerson.lastName}", style = TextStyle(Color.Black))
                             Text(
-                                text = savedPerson.phoneNumber,
+                                text = "${savedPerson.firstName} ${savedPerson.lastName}",
+                                style = TextStyle(Color.Black)
+                            )
+                            Text(
+                                text = formattedPhoneNumber.text,
                                 style = TextStyle(TextGrey),
                                 fontSize = 10.sp
                             )
