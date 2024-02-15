@@ -13,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,7 +22,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.assessment.testshop.R
+import com.assessment.testshop.data.local.Person
 import com.assessment.testshop.presentation.theme.ButtonGrey
 import com.assessment.testshop.presentation.theme.EnabledButton
 import com.assessment.testshop.presentation.theme.IconPerson
@@ -31,11 +34,13 @@ import com.assessment.testshop.presentation.theme.TextGrey
 @Composable
 @Preview(showBackground = true)
 fun ProfileScreen() {
-    ProfileScreenContent()
+    val viewModel: ProfileViewModel = hiltViewModel()
+    val savedPerson = viewModel.savedPerson.collectAsState().value
+    ProfileScreenContent(savedPerson)
 }
 
 @Composable
-fun ProfileScreenContent() {
+fun ProfileScreenContent(savedPerson: Person) {
     Column(modifier = Modifier.padding(8.dp)) {
         Button(modifier = Modifier
             .fillMaxWidth()
@@ -54,9 +59,9 @@ fun ProfileScreenContent() {
                             contentDescription = "person", tint = IconPerson
                         )
                         Column(modifier = Modifier.padding(start = 8.dp)) {
-                            Text(text = "FName LName", style = TextStyle(Color.Black))
+                            Text(text = "${savedPerson.firstName} ${savedPerson.lastName}", style = TextStyle(Color.Black))
                             Text(
-                                text = "phone number",
+                                text = savedPerson.phoneNumber,
                                 style = TextStyle(TextGrey),
                                 fontSize = 10.sp
                             )
