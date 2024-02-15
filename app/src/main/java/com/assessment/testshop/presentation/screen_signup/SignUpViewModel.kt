@@ -18,12 +18,18 @@ class SignUpViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _person = MutableStateFlow(String())
+    val person = _person.asStateFlow()
+
     private val pattern = Regex("[А-Яа-яЁё]+")
 
     private var firstName: String = ""
     private var lastName: String = ""
     private var phoneNumber: String = ""
 
+    init {
+        getPerson()
+    }
     fun validateFirstName(firstName: String) {
         this.firstName = firstName
         when {
@@ -57,6 +63,17 @@ class SignUpViewModel @Inject constructor(
     fun savePerson() {
         viewModelScope.launch {
             repository.insertPerson(Person(null, firstName, lastName, phoneNumber))
+        }
+    }
+     fun getPerson(){
+        viewModelScope.launch {
+            val person = repository.getPerson()
+            if (person == null){
+                _person.update { "" }
+            }else{
+                _person.update { person.phoneNumber }
+            }
+
         }
     }
 }

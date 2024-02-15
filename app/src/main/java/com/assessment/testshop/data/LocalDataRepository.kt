@@ -13,7 +13,7 @@ class LocalDataRepository @Inject constructor(private val dao: LocalDataDao) {
     }
 
     @WorkerThread
-    suspend fun getPerson(): Person {
+    suspend fun getPerson(): Person? {
         return dao.getPerson()
     }
 

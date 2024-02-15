@@ -18,7 +18,7 @@ interface LocalDataDao {
     suspend fun removeFavoriteProduct(favoriteProduct: FavoriteProduct)
 
     @Query("SELECT*FROM person")
-    suspend fun getPerson(): Person
+    suspend fun getPerson(): Person?
 
     @Query("SELECT*FROM `favorite products`")
     suspend fun getFavoriteProducts(): List<FavoriteProduct>

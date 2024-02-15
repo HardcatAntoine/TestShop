@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "person")
 data class Person(
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
-    @ColumnInfo("First name") val firstName:String,
-    @ColumnInfo("Last name") val lastName:String,
-    @ColumnInfo("Phone number") val phoneNumber:String,
+    @ColumnInfo("First name") val firstName: String = "",
+    @ColumnInfo("Last name") val lastName: String = "",
+    @ColumnInfo("Phone number") val phoneNumber: String = "",
 )
 
 @Entity(tableName = "favorite products")
