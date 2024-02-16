@@ -2,8 +2,10 @@ package com.assessment.testshop.presentation.screen_signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.assessment.testshop.data.LocalDataRepository
+import com.assessment.testshop.data.ProfileRepository
 import com.assessment.testshop.data.local.Person
+import com.assessment.testshop.domain.GetProfileDataUseCase
+import com.assessment.testshop.domain.InsertProfileDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val repository: LocalDataRepository
+    private val insertProfileDataUseCase: InsertProfileDataUseCase,
+    private val getProfileDataUseCase: GetProfileDataUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState = _uiState.asStateFlow()
@@ -30,6 +33,7 @@ class SignUpViewModel @Inject constructor(
     init {
         getPerson()
     }
+
     fun validateFirstName(firstName: String) {
         this.firstName = firstName
         when {
@@ -62,18 +66,18 @@ class SignUpViewModel @Inject constructor(
 
     fun savePerson() {
         viewModelScope.launch {
-            repository.insertPerson(Person(null, firstName, lastName, phoneNumber))
+            insertProfileDataUseCase(firstName, lastName, phoneNumber)
         }
     }
-     fun getPerson(){
+
+    private fun getPerson() {
         viewModelScope.launch {
-            val person = repository.getPerson()
-            if (person == null){
+            val person = getProfileDataUseCase.invoke()
+            if (person == null) {
                 _person.update { "" }
-            }else{
+            } else {
                 _person.update { person.phoneNumber }
             }
-
         }
     }
 }
