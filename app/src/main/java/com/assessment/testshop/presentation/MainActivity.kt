@@ -61,7 +61,7 @@ fun TestShopApp() {
                         TopAppBar(
                             title = { },
                             navigationIcon = {
-                                IconButton(onClick = { navController.navigate(CatalogDestination.route) }) {
+                                IconButton(onClick = { navController.navigateUp() }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_back),
                                         contentDescription = "Back"
