@@ -2,8 +2,6 @@ package com.assessment.testshop.presentation.screen_catalog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.assessment.testshop.data.LocalDataRepository
-import com.assessment.testshop.data.local.FavoriteProductId
 import com.assessment.testshop.domain.FilterCatalogUseCase
 import com.assessment.testshop.domain.GetProductsCatalogUseCase
 import com.assessment.testshop.domain.InsertFavoriteProductUseCase

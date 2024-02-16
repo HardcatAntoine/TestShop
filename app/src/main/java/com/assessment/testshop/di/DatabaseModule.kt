@@ -2,7 +2,7 @@ package com.assessment.testshop.di
 
 import android.app.Application
 import androidx.room.Room
-import com.assessment.testshop.data.LocalDataRepository
+import com.assessment.testshop.data.ProfileRepository
 import com.assessment.testshop.data.local.LocalDataDao
 import com.assessment.testshop.data.local.LocalDatabase
 import dagger.Module
@@ -30,7 +30,7 @@ object DatabaseModule {
     }
 
     @Provides
-    fun providesLocalDataRepository(dao: LocalDataDao): LocalDataRepository {
-        return LocalDataRepository(dao)
+    fun providesLocalDataRepository(dao: LocalDataDao): ProfileRepository {
+        return ProfileRepository(dao)
     }
 }
