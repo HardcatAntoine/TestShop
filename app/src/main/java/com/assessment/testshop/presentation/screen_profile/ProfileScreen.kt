@@ -37,18 +37,25 @@ import com.assessment.testshop.presentation.theme.RatingText
 import com.assessment.testshop.presentation.theme.TextGrey
 
 @Composable
-@Preview(showBackground = true)
-fun ProfileScreen() {
+fun ProfileScreen(onFavoriteClick: () -> Unit) {
     val viewModel: ProfileViewModel = hiltViewModel()
     val savedPerson = viewModel.savedPerson.collectAsState().value
     val favoriteProductsListSize = viewModel.favoriteProductsListSize.collectAsState().value
     viewModel.getFavoriteProductsListSize()
-    ProfileScreenContent(savedPerson, favoriteProductsListSize)
+    ProfileScreenContent(
+        onFavoriteClick = { onFavoriteClick() },
+        savedPerson = savedPerson,
+        favoriteProductsListSize = favoriteProductsListSize
+    )
 
 }
 
 @Composable
-fun ProfileScreenContent(savedPerson: Person, favoriteProductsListSize: Int) {
+fun ProfileScreenContent(
+    onFavoriteClick: () -> Unit,
+    savedPerson: Person,
+    favoriteProductsListSize: Int
+) {
     val formattedPhoneNumber =
         PhoneVisualTransformation(
             MASK, MASK_NUMBER
@@ -94,7 +101,8 @@ fun ProfileScreenContent(savedPerson: Person, favoriteProductsListSize: Int) {
             .fillMaxWidth()
             .padding(top = 16.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(ButtonGrey), onClick = { }) {
+            colors = ButtonDefaults.buttonColors(ButtonGrey),
+            onClick = { onFavoriteClick() }) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
