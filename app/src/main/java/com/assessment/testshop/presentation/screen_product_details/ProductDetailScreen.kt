@@ -2,22 +2,17 @@ package com.assessment.testshop.presentation.screen_product_details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -26,20 +21,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.assessment.testshop.R
 import com.assessment.testshop.domain.models.Product
-import com.assessment.testshop.presentation.theme.ButtonBackInvisible
+import com.assessment.testshop.presentation.components.FiveStarRating
 import com.assessment.testshop.presentation.theme.ButtonGrey
 import com.assessment.testshop.presentation.theme.EnabledButton
 import com.assessment.testshop.presentation.theme.TextGrey
@@ -55,271 +49,267 @@ fun ProductDetailScreen() {
 
 @Composable
 fun ProductDetailContent(product: Product) {
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .background(Color.White)
-            .verticalScroll(scrollState)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(width = 340.dp, height = 368.dp)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painterResource(id = R.drawable.image_1),
-                contentDescription = "Product image"
-            )
-            IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
+    LazyColumn(modifier = Modifier.padding(8.dp)) {
+        item {
+            Box(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Favorite button"
+                Image(
+                    modifier = Modifier
+                        .size(width = 340.dp, height = 368.dp)
+                        .align(Alignment.Center),
+                    painter = painterResource(id = product.imageRes),
+                    contentDescription = "Product image"
                 )
-            }
-            IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_question),
-                    contentDescription = "Question button"
-                )
-            }
-        }
-        Icon(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "pagination"
-        )
-        Text(text = product.title, fontSize = 16.sp, style = TextStyle(color = TextGrey))
-        Text(text = product.subtitle, fontSize = 20.sp)
-        Text(
-            modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
-            text = "Доступно для заказа ${product.available} штук",
-            style = TextStyle(TextGrey),
-        )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            SetRatingStarIconState(rating = product.feedback.rating)
-            Spacer(modifier = Modifier.size(2.dp))
-            Text(text = "${product.feedback.rating}", style = TextStyle())
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(text = "${product.feedback.count} отзыва")
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = product.price.priceWithDiscount, fontSize = 24.sp)
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(text = product.price.price, fontSize = 16.sp, style = TextStyle(TextGrey))
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(
-                text = "-${product.price.discount}%",
-                Modifier
-                    .background(EnabledButton)
-                    .padding(start = 5.dp, end = 5.dp, top = 1.dp, bottom = 1.dp),
-                style = TextStyle(Color.White),
-                fontSize = 12.sp
-            )
-        }
-        Text(
-            modifier = Modifier.padding(top = 24.dp, bottom = 16.dp),
-            text = "Описание",
-            fontSize = 16.sp
-        )
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                ButtonGrey, Color.Black
-            ),
-            shape = RoundedCornerShape(8.dp),
-            onClick = {},
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "product.title", fontSize = 16.sp)
-                Icon(
-                    modifier = Modifier,
-                    painter = painterResource(id = R.drawable.ic_right_stroke),
-                    contentDescription = "Right stroke"
-                )
-            }
-        }
-        Text(text = product.description)
-        Button(
-            modifier = Modifier,
-            colors = ButtonDefaults.buttonColors(ButtonBackInvisible),
-            onClick = {}
-        ) {
-            Text(text = "Скрыть", fontSize = 14.sp, style = TextStyle(TextGrey))
-        }
-        Text(text = "Характеристики", fontSize = 20.sp)
-        Box(modifier = Modifier.fillMaxWidth()) {
-            LazyColumn {
-                itemsIndexed(product.info) { _, item ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = item.title)
-                        Text(text = item.value)
-                    }
+                IconButton(
+                    onClick = { },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_half_favorite),
+                        contentDescription = "Favorite button",
+                        tint = EnabledButton
+                    )
+                }
+                IconButton(
+                    onClick = { },
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_help),
+                        contentDescription = "Question button",
+                        tint = TextGrey
+                    )
                 }
             }
         }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        ) {
-            Text(text = "Состав", fontSize = 20.sp)
-            Icon(
-                painter = painterResource(id = R.drawable.ic_copy),
-                contentDescription = "Copy"
+        item {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                Icon(
+                    modifier = Modifier.size(6.dp),
+                    painter = painterResource(id = R.drawable.paggination_circle),
+                    contentDescription = "pagination",
+                    tint = EnabledButton
+                )
+                Spacer(modifier = Modifier.size(10.dp))
+                Icon(
+                    modifier = Modifier.size(6.dp),
+                    painter = painterResource(id = R.drawable.paggination_circle),
+                    contentDescription = "pagination",
+                    tint = TextGrey
+                )
+                Spacer(modifier = Modifier.size(10.dp))
+                Icon(
+                    modifier = Modifier.size(6.dp),
+                    painter = painterResource(id = R.drawable.paggination_circle),
+                    contentDescription = "pagination",
+                    tint = TextGrey
+                )
+                Spacer(modifier = Modifier.size(10.dp))
+                Icon(
+                    modifier = Modifier.size(6.dp),
+                    painter = painterResource(id = R.drawable.paggination_circle),
+                    contentDescription = "pagination",
+                    tint = TextGrey
+                )
+            }
+        }
+        item {
+            Text(
+                modifier = Modifier.padding(top = 8.dp),
+                text = product.title,
+                fontSize = 18.sp,
+                style = TextStyle(color = TextGrey)
             )
         }
-        Text(text = product.ingredients, maxLines = 2)
-        Button(
-            modifier = Modifier,
-            colors = ButtonDefaults.buttonColors(ButtonBackInvisible),
-            onClick = {}
-        ) {
-            Text(text = "Подробнее", fontSize = 14.sp, style = TextStyle(TextGrey))
+        item {
+            Text(
+                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+                text = product.subtitle,
+                fontSize = 20.sp
+            )
         }
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(EnabledButton),
-            onClick = {}
-        ) {
+        item {
+            Text(
+                modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
+                text = "Доступно для заказа ${product.available} штук",
+                style = TextStyle(TextGrey),
+            )
+        }
+        item {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                FiveStarRating(rating = product.feedback.rating)
+                Spacer(modifier = Modifier.size(2.dp))
+                Text(text = "${product.feedback.rating}", style = TextStyle(TextGrey))
+                Spacer(modifier = Modifier.size(10.dp))
+                Text(text = "${product.feedback.count} отзыва", style = TextStyle(TextGrey))
+            }
+        }
+        item {
             Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.padding(top = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Box {
+                Text(
+                    text = "${product.price.priceWithDiscount} ${product.price.unit}",
+                    fontSize = 24.sp
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Box(modifier = Modifier.padding(top = 2.dp),) {
                     Text(
-                        text = product.price.priceWithDiscount,
-                        fontSize = 24.sp,
-                        style = TextStyle(
-                            Color.White
-                        )
-                    )
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(
-                        text = product.price.price,
-                        fontSize = 16.sp,
+                        text = "${product.price.price} ${product.price.unit}",
+                        fontSize = 14.sp,
                         style = TextStyle(TextGrey)
                     )
+                    Image(
+                        modifier = Modifier.padding(top = 5.dp),
+                        painter = painterResource(id = R.drawable.discount_line),
+                        contentDescription = "discount_line"
+                    )
                 }
-                Text(text = "Добавить в корзину", style = TextStyle(Color.White))
+                Spacer(modifier = Modifier.size(8.dp))
+                Box(
+                    Modifier
+                        .background(EnabledButton)
+                        .padding(top = 2.dp)
+                ) {
+                    Text(
+                        text = "-${product.price.discount}%",
+                        style = TextStyle(Color.White),
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        }
+        item {
+            Text(
+                modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+                text = "Описание",
+                fontSize = 20.sp,
+                fontWeight = FontWeight(600)
+            )
+        }
+        item {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    ButtonGrey, Color.Black
+                ),
+                shape = RoundedCornerShape(8.dp),
+                onClick = {},
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = product.title, fontSize = 16.sp)
+                    Icon(
+                        modifier = Modifier,
+                        painter = painterResource(id = R.drawable.ic_right_stroke),
+                        contentDescription = "Right stroke"
+                    )
+                }
+            }
+        }
+        item {
+            Text(modifier = Modifier.padding(top = 8.dp), text = product.description)
+        }
+        item {
+            Text(
+                modifier = Modifier.clickable { }.padding(top = 8.dp),
+                text = "Скрыть", fontSize = 14.sp, style = TextStyle(TextGrey)
+            )
+        }
+        item {
+            Text(
+                modifier = Modifier.padding(top = 24.dp),
+                text = "Характеристики",
+                fontSize = 20.sp,
+                fontWeight = FontWeight(600)
+            )
+        }
+        items(product.info) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = it.title)
+                Text(text = it.value)
+            }
+        }
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "Состав", fontSize = 20.sp, fontWeight = FontWeight(600))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_copy),
+                    contentDescription = "Copy",
+                    tint = TextGrey
+                )
+            }
+
+
+        }
+        item {
+            Text(modifier = Modifier.padding(top = 8.dp), text = product.ingredients, maxLines = 2)
+        }
+        item {
+            Text(
+                modifier = Modifier.clickable { }.padding(top = 8.dp),
+                text = "Подробнее", fontSize = 14.sp, style = TextStyle(TextGrey)
+            )
+        }
+        item {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(EnabledButton),
+                onClick = {}
+            ) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Box {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "${product.price.priceWithDiscount} ${product.price.unit}",
+                                fontSize = 20.sp,
+                                style = TextStyle(Color.White)
+                            )
+                            Spacer(modifier = Modifier.size(8.dp))
+                            Box {
+                                Text(
+                                    text = "${product.price.price} ${product.price.unit}",
+                                    fontSize = 12.sp,
+                                    style = TextStyle(TextGrey)
+                                )
+                                Image(
+                                    modifier = Modifier.padding(top = 5.dp),
+                                    painter = painterResource(id = R.drawable.discount_line),
+                                    contentDescription = "discount_line"
+                                )
+                            }
+                        }
+
+                    }
+                    Text(text = "Добавить в корзину", style = TextStyle(Color.White))
+                }
             }
         }
     }
-}
-
-@Composable
-fun SetRatingStarIconState(rating: Double) {
-    var firstStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
-    var secondStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
-    var thirdStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
-    var fourthStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
-    var fifthStarUIState by remember { mutableStateOf(R.drawable.ic_empty_star) }
-    when {
-        rating > 0 && rating < 1 -> {
-            firstStarUIState = R.drawable.ic_half_star
-        }
-
-        rating > 1 && rating < 2 -> {
-            firstStarUIState = R.drawable.ic_full_star
-            secondStarUIState = R.drawable.ic_half_star
-        }
-
-        rating > 2 && rating < 3 -> {
-            firstStarUIState = R.drawable.ic_full_star
-            secondStarUIState = R.drawable.ic_full_star
-            thirdStarUIState = R.drawable.ic_half_star
-        }
-
-        rating > 3 && rating < 4 -> {
-            firstStarUIState = R.drawable.ic_full_star
-            secondStarUIState = R.drawable.ic_full_star
-            thirdStarUIState = R.drawable.ic_full_star
-            fourthStarUIState = R.drawable.ic_half_star
-        }
-
-        rating > 4 && rating < 5 -> {
-            firstStarUIState = R.drawable.ic_full_star
-            secondStarUIState = R.drawable.ic_full_star
-            thirdStarUIState = R.drawable.ic_full_star
-            fourthStarUIState = R.drawable.ic_full_star
-            fifthStarUIState = R.drawable.ic_half_star
-        }
-
-        rating == 1.0 -> {
-            firstStarUIState = R.drawable.ic_full_star
-        }
-
-        rating == 2.0 -> {
-            firstStarUIState = R.drawable.ic_full_star
-            secondStarUIState = R.drawable.ic_full_star
-        }
-
-        rating == 3.0 -> {
-            firstStarUIState = R.drawable.ic_full_star
-            secondStarUIState = R.drawable.ic_full_star
-            thirdStarUIState = R.drawable.ic_full_star
-        }
-
-        rating == 4.0 -> {
-            firstStarUIState = R.drawable.ic_full_star
-            secondStarUIState = R.drawable.ic_full_star
-            thirdStarUIState = R.drawable.ic_full_star
-            fourthStarUIState = R.drawable.ic_full_star
-        }
-
-        rating == 5.0 -> {
-            firstStarUIState = R.drawable.ic_full_star
-            secondStarUIState = R.drawable.ic_full_star
-            thirdStarUIState = R.drawable.ic_full_star
-            fourthStarUIState = R.drawable.ic_full_star
-            fifthStarUIState = R.drawable.ic_full_star
-        }
-
-    }
-    Row (verticalAlignment = Alignment.CenterVertically){
-        Icon(
-            modifier = Modifier.size(15.dp),
-            painter = painterResource(id = firstStarUIState),
-            contentDescription = "Rating"
-        )
-        Icon(
-            modifier = Modifier.size(15.dp),
-            painter = painterResource(id = secondStarUIState),
-            contentDescription = "Rating"
-        )
-        Icon(
-            modifier = Modifier.size(15.dp),
-            painter = painterResource(id = thirdStarUIState),
-            contentDescription = "Rating"
-        )
-        Icon(
-            modifier = Modifier.size(15.dp),
-            painter = painterResource(id = fourthStarUIState),
-            contentDescription = "Rating"
-        )
-        Icon(
-            modifier = Modifier.size(15.dp),
-            painter = painterResource(id = fifthStarUIState),
-            contentDescription = "Rating"
-        )
-    }
-
 }
 
 
