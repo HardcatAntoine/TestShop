@@ -2,6 +2,8 @@ package com.assessment.testshop.presentation.screen_catalog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.assessment.testshop.data.LocalDataRepository
+import com.assessment.testshop.data.local.FavoriteProductId
 import com.assessment.testshop.domain.FilterCatalogUseCase
 import com.assessment.testshop.domain.GetProductsCatalogUseCase
 import com.assessment.testshop.domain.models.Product
@@ -15,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
+    private val repository: LocalDataRepository,
     private val getProductsCatalog: GetProductsCatalogUseCase,
     private val filterCatalogUseCase: FilterCatalogUseCase
 ) : ViewModel() {
@@ -37,4 +40,19 @@ class CatalogViewModel @Inject constructor(
             _uiState.update { filterCatalogUseCase(filterTag) }
         }
     }
+
+    fun addToFavorite(id: String) {
+        viewModelScope.launch {
+            repository.insertFavoriteProduct(FavoriteProductId(id))
+            getProducts()
+        }
+    }
+
+    fun removeFavorite(id: String) {
+        viewModelScope.launch {
+            repository.removeFavoriteProduct(FavoriteProductId(id))
+            getProducts()
+        }
+    }
+
 }

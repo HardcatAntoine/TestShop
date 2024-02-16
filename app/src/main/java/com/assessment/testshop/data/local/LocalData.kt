@@ -13,6 +13,6 @@ data class Person(
 )
 
 @Entity(tableName = "favorite products")
-data class FavoriteProduct(
+data class FavoriteProductId(
     @PrimaryKey var id: String
 )

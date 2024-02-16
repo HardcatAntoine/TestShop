@@ -12,14 +12,14 @@ interface LocalDataDao {
     suspend fun insertPerson(person: Person)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFavoriteProduct(favoriteProduct: FavoriteProduct)
+    suspend fun insertFavoriteProduct(favoriteProductId: FavoriteProductId)
 
     @Delete
-    suspend fun removeFavoriteProduct(favoriteProduct: FavoriteProduct)
+    suspend fun removeFavoriteProduct(favoriteProductId: FavoriteProductId)
 
     @Query("SELECT*FROM person")
     suspend fun getPerson(): Person?
 
     @Query("SELECT*FROM `favorite products`")
-    suspend fun getFavoriteProducts(): List<FavoriteProduct>
+    suspend fun getFavoriteProducts(): List<FavoriteProductId>
 }
