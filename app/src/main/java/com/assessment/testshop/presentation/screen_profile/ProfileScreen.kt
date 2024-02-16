@@ -41,11 +41,14 @@ import com.assessment.testshop.presentation.theme.TextGrey
 fun ProfileScreen() {
     val viewModel: ProfileViewModel = hiltViewModel()
     val savedPerson = viewModel.savedPerson.collectAsState().value
-    ProfileScreenContent(savedPerson)
+    val favoriteProductsListSize = viewModel.favoriteProductsListSize.collectAsState().value
+
+    ProfileScreenContent(savedPerson, favoriteProductsListSize)
+
 }
 
 @Composable
-fun ProfileScreenContent(savedPerson: Person) {
+fun ProfileScreenContent(savedPerson: Person, favoriteProductsListSize: Int) {
     val formattedPhoneNumber =
         PhoneVisualTransformation(
             MASK, MASK_NUMBER
@@ -106,7 +109,7 @@ fun ProfileScreenContent(savedPerson: Person) {
                         Column(modifier = Modifier.padding(start = 8.dp)) {
                             Text(text = "Избранное", style = TextStyle(Color.Black))
                             Text(
-                                text = "0 товаров",
+                                text = "$favoriteProductsListSize товаров",
                                 style = TextStyle(TextGrey),
                                 fontSize = 10.sp
                             )
