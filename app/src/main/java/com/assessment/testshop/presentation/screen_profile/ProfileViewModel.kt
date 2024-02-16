@@ -1,5 +1,6 @@
 package com.assessment.testshop.presentation.screen_profile
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.assessment.testshop.data.local.Person
@@ -27,7 +28,6 @@ class ProfileViewModel @Inject constructor(
 
     init {
         getPersonData()
-        getFavoriteProductsListSize()
     }
 
     private fun getPersonData() {
@@ -35,10 +35,11 @@ class ProfileViewModel @Inject constructor(
             _savedPerson.update { getProfileDataUseCase.invoke()!! }
         }
     }
-    private fun getFavoriteProductsListSize() {
+     fun getFavoriteProductsListSize() {
         viewModelScope.launch {
            val list =  getFavoriteProductsCatalogUseCase.invoke()
             _favoriteProductsListSize.update { list.size }
+            Log.d("LIST Size", "${list.size}")
         }
     }
 }

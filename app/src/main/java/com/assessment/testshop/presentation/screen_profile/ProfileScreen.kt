@@ -42,7 +42,7 @@ fun ProfileScreen() {
     val viewModel: ProfileViewModel = hiltViewModel()
     val savedPerson = viewModel.savedPerson.collectAsState().value
     val favoriteProductsListSize = viewModel.favoriteProductsListSize.collectAsState().value
-
+    viewModel.getFavoriteProductsListSize()
     ProfileScreenContent(savedPerson, favoriteProductsListSize)
 
 }
