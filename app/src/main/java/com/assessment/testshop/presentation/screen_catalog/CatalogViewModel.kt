@@ -6,6 +6,8 @@ import com.assessment.testshop.data.LocalDataRepository
 import com.assessment.testshop.data.local.FavoriteProductId
 import com.assessment.testshop.domain.FilterCatalogUseCase
 import com.assessment.testshop.domain.GetProductsCatalogUseCase
+import com.assessment.testshop.domain.InsertFavoriteProductUseCase
+import com.assessment.testshop.domain.RemoveFavoriteProductUseCase
 import com.assessment.testshop.domain.models.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
-    private val repository: LocalDataRepository,
+    private val insertFavoriteProductUseCase: InsertFavoriteProductUseCase,
+    private val removeFavoriteProductUseCase: RemoveFavoriteProductUseCase,
     private val getProductsCatalog: GetProductsCatalogUseCase,
     private val filterCatalogUseCase: FilterCatalogUseCase
 ) : ViewModel() {
@@ -43,14 +46,14 @@ class CatalogViewModel @Inject constructor(
 
     fun addToFavorite(id: String) {
         viewModelScope.launch {
-            repository.insertFavoriteProduct(FavoriteProductId(id))
+            insertFavoriteProductUseCase(id)
             getProducts()
         }
     }
 
     fun removeFavorite(id: String) {
         viewModelScope.launch {
-            repository.removeFavoriteProduct(FavoriteProductId(id))
+            removeFavoriteProductUseCase(id)
             getProducts()
         }
     }

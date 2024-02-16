@@ -22,4 +22,14 @@ class ProductsRepository @Inject constructor(
     suspend fun getFavoriteProductIds(): List<FavoriteProductId> {
         return dao.getFavoriteProducts()
     }
+    @WorkerThread
+    suspend fun insertFavoriteProduct(favoriteProductId: FavoriteProductId) {
+        dao.insertFavoriteProduct(favoriteProductId)
+    }
+
+    @WorkerThread
+    suspend fun removeFavoriteProduct(favoriteProductId: FavoriteProductId): List<FavoriteProductId> {
+        dao.removeFavoriteProduct(favoriteProductId)
+        return dao.getFavoriteProducts()
+    }
 }
