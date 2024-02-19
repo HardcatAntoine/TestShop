@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +31,19 @@ import com.assessment.testshop.presentation.theme.TextGrey
 fun SignUpScreen(onClick: () -> Unit) {
     val viewModel: SignUpViewModel = hiltViewModel()
     val uiState = viewModel.uiState.collectAsState()
+    val savedPhoneNumber = viewModel.person.collectAsState().value
+    if (checkSavedPersonPhoneNumber(savedPhoneNumber)) {
+        SingUpContent(onClick = { onClick() }, uiState = uiState, viewModel = viewModel)
+    } else {
+        onClick()
+    }
+}
+fun checkSavedPersonPhoneNumber(savedPhoneNumber:String):Boolean {
+    return savedPhoneNumber.isEmpty()
+}
 
+@Composable
+fun SingUpContent(onClick: () -> Unit, uiState: State<SignUpUiState>, viewModel: SignUpViewModel) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         Box(modifier = Modifier.padding(top = 150.dp)) {
             Column {
@@ -66,6 +79,7 @@ fun SignUpScreen(onClick: () -> Unit) {
                     ),
                     onClick = {
                         onClick()
+                        viewModel.savePerson()
                     }) {
                     Text(text = "Войти")
                 }
@@ -91,5 +105,8 @@ fun SignUpScreen(onClick: () -> Unit) {
         }
     }
 }
+
+
+
 
 

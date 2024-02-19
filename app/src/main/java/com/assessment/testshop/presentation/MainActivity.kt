@@ -57,11 +57,11 @@ fun TestShopApp() {
         Scaffold(
             topBar = {
                 currentDestination?.route?.let {
-                    if (it.contains(Route.PRODUCT_DETAILS.name)) {
+                    if (it.contains(Route.PRODUCT_DETAILS.name) || it.contains(Route.FAVORITE.name)) {
                         TopAppBar(
                             title = { },
                             navigationIcon = {
-                                IconButton(onClick = { navController.navigate(CatalogDestination.route) }) {
+                                IconButton(onClick = { navController.navigateUp() }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_back),
                                         contentDescription = "Back"

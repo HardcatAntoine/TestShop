@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.assessment.testshop.R
 import com.assessment.testshop.domain.models.Product
 import com.assessment.testshop.presentation.theme.DisabledButton
@@ -56,8 +58,9 @@ fun CatalogScreen(onItemClick: (String) -> Unit) {
 
     CatalogScreenContent(
         uiState,
-        onItemClick = { onItemClick(it.id)},
-        onFavoriteClick = {/*TODO*/ },
+        onItemClick = { onItemClick(it.id) },
+        onAddFavorite = { viewModel.addToFavorite(it.id) },
+        onRemoveFavorite = { viewModel.removeFavorite(it.id) },
         onAddToCartClick = {/*TODO*/ },
         onFilterChipClick = { filterTag -> viewModel.filterProducts(filterTag) },
     )
@@ -67,7 +70,8 @@ fun CatalogScreen(onItemClick: (String) -> Unit) {
 fun CatalogScreenContent(
     products: List<Product>,
     onItemClick: (Product) -> Unit,
-    onFavoriteClick: (Product) -> Unit,
+    onAddFavorite: (Product) -> Unit,
+    onRemoveFavorite: (Product) -> Unit,
     onAddToCartClick: (Product) -> Unit,
     onFilterChipClick: (String) -> Unit,
 ) {
@@ -86,7 +90,8 @@ fun CatalogScreenContent(
                 ProductsCatalogItem(
                     product = product,
                     onItemClick = { onItemClick(it) },
-                    onFavoriteClick = { onFavoriteClick(it) },
+                    onAddFavorite = { onAddFavorite(it) },
+                    onRemoveFavorite = { onRemoveFavorite(it) },
                     onAddToCartClick = { onAddToCartClick(it) }
                 )
             }
@@ -99,7 +104,8 @@ fun CatalogScreenContent(
 fun ProductsCatalogItem(
     product: Product,
     onItemClick: (Product) -> Unit,
-    onFavoriteClick: (Product) -> Unit,
+    onAddFavorite: (Product) -> Unit,
+    onRemoveFavorite: (Product) -> Unit,
     onAddToCartClick: (Product) -> Unit,
 ) {
     Card(
@@ -122,11 +128,23 @@ fun ProductsCatalogItem(
                 contentDescription = "Product Image"
             )
             IconButton(
-                onClick = { onFavoriteClick(product) },
+                onClick = {
+                    if (product.isFavorite) {
+                        onRemoveFavorite(product)
+                    } else {
+                        onAddFavorite(product)
+                    }
+                },
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_half_favorite),
+                    painter = painterResource(
+                        id = if (product.isFavorite) {
+                            R.drawable.ic_full_favorite
+                        } else {
+                            R.drawable.ic_half_favorite
+                        }
+                    ),
                     contentDescription = "Favorite button",
                     tint = EnabledButton
                 )
@@ -135,7 +153,8 @@ fun ProductsCatalogItem(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)) {
+                .background(Color.White)
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

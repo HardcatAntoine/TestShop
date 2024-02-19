@@ -17,7 +17,8 @@ data class Product(
     val tags: List<String>,
     val title: String,
     val allTags: List<String>,
-    val imageRes: Int
+    val imageRes: Int,
+    val isFavorite: Boolean = false
 )
 
 fun ProductDto.toProduct(): Product {

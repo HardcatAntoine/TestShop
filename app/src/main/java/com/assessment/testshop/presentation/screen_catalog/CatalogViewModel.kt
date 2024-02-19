@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.assessment.testshop.domain.FilterCatalogUseCase
 import com.assessment.testshop.domain.GetProductsCatalogUseCase
+import com.assessment.testshop.domain.InsertFavoriteProductUseCase
+import com.assessment.testshop.domain.RemoveFavoriteProductUseCase
 import com.assessment.testshop.domain.models.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
+    private val insertFavoriteProductUseCase: InsertFavoriteProductUseCase,
+    private val removeFavoriteProductUseCase: RemoveFavoriteProductUseCase,
     private val getProductsCatalog: GetProductsCatalogUseCase,
     private val filterCatalogUseCase: FilterCatalogUseCase
 ) : ViewModel() {
@@ -37,4 +41,19 @@ class CatalogViewModel @Inject constructor(
             _uiState.update { filterCatalogUseCase(filterTag) }
         }
     }
+
+    fun addToFavorite(id: String) {
+        viewModelScope.launch {
+            insertFavoriteProductUseCase(id)
+            getProducts()
+        }
+    }
+
+    fun removeFavorite(id: String) {
+        viewModelScope.launch {
+            removeFavoriteProductUseCase(id)
+            getProducts()
+        }
+    }
+
 }

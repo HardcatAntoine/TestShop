@@ -42,6 +42,10 @@ object ProfileDestination : Destination {
 object ProductDetailsDestination:Destination{
     override val route: String = Route.PRODUCT_DETAILS.name
     override val icon: Int = R.drawable.ic_catalog
+}
+object FavoriteProductsDestination:Destination{
+    override val route: String = Route.FAVORITE.name
+    override val icon: Int = R.drawable.ic_catalog
 
 
 }

@@ -13,15 +13,23 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.assessment.testshop.R
+import com.assessment.testshop.data.local.Person
+import com.assessment.testshop.presentation.components.MASK
+import com.assessment.testshop.presentation.components.MASK_NUMBER
+import com.assessment.testshop.presentation.components.PhoneVisualTransformation
 import com.assessment.testshop.presentation.theme.ButtonGrey
 import com.assessment.testshop.presentation.theme.EnabledButton
 import com.assessment.testshop.presentation.theme.IconPerson
@@ -29,13 +37,30 @@ import com.assessment.testshop.presentation.theme.RatingText
 import com.assessment.testshop.presentation.theme.TextGrey
 
 @Composable
-@Preview(showBackground = true)
-fun ProfileScreen() {
-    ProfileScreenContent()
+fun ProfileScreen(onFavoriteClick: () -> Unit) {
+    val viewModel: ProfileViewModel = hiltViewModel()
+    val savedPerson = viewModel.savedPerson.collectAsState().value
+    val favoriteProductsListSize = viewModel.favoriteProductsListSize.collectAsState().value
+    viewModel.getFavoriteProductsListSize()
+    ProfileScreenContent(
+        onFavoriteClick = { onFavoriteClick() },
+        savedPerson = savedPerson,
+        favoriteProductsListSize = favoriteProductsListSize
+    )
+
 }
 
 @Composable
-fun ProfileScreenContent() {
+fun ProfileScreenContent(
+    onFavoriteClick: () -> Unit,
+    savedPerson: Person,
+    favoriteProductsListSize: Int
+) {
+    val formattedPhoneNumber =
+        PhoneVisualTransformation(
+            MASK, MASK_NUMBER
+        ).filter(AnnotatedString(savedPerson.phoneNumber))
+
     Column(modifier = Modifier.padding(8.dp)) {
         Button(modifier = Modifier
             .fillMaxWidth()
@@ -54,9 +79,12 @@ fun ProfileScreenContent() {
                             contentDescription = "person", tint = IconPerson
                         )
                         Column(modifier = Modifier.padding(start = 8.dp)) {
-                            Text(text = "FName LName", style = TextStyle(Color.Black))
                             Text(
-                                text = "phone number",
+                                text = "${savedPerson.firstName} ${savedPerson.lastName}",
+                                style = TextStyle(Color.Black)
+                            )
+                            Text(
+                                text = formattedPhoneNumber.text,
                                 style = TextStyle(TextGrey),
                                 fontSize = 10.sp
                             )
@@ -73,7 +101,8 @@ fun ProfileScreenContent() {
             .fillMaxWidth()
             .padding(top = 16.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(ButtonGrey), onClick = { }) {
+            colors = ButtonDefaults.buttonColors(ButtonGrey),
+            onClick = { onFavoriteClick() }) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -88,7 +117,7 @@ fun ProfileScreenContent() {
                         Column(modifier = Modifier.padding(start = 8.dp)) {
                             Text(text = "Избранное", style = TextStyle(Color.Black))
                             Text(
-                                text = "0 товаров",
+                                text = "$favoriteProductsListSize товаров",
                                 style = TextStyle(TextGrey),
                                 fontSize = 10.sp
                             )

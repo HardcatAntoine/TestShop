@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.assessment.testshop.domain.PRODUCT_ID
 import com.assessment.testshop.presentation.screen_cart.ShoppingCartScreen
 import com.assessment.testshop.presentation.screen_catalog.CatalogScreen
+import com.assessment.testshop.presentation.screen_favorite.FavoriteProductsScreen
 import com.assessment.testshop.presentation.screen_main.MainScreen
 import com.assessment.testshop.presentation.screen_product_details.ProductDetailScreen
 import com.assessment.testshop.presentation.screen_profile.ProfileScreen
@@ -47,13 +48,18 @@ fun TestShopNavHost(
             SalesScreen()
         }
         composable(ProfileDestination.route) {
-            ProfileScreen()
+            ProfileScreen(onFavoriteClick = { navController.navigate(FavoriteProductsDestination.route) })
         }
         composable(
             route = ProductDetailsDestination.route + "/{${PRODUCT_ID}}",
             arguments = listOf(navArgument(PRODUCT_ID) { type = NavType.StringType })
         ) {
             ProductDetailScreen()
+        }
+        composable(FavoriteProductsDestination.route) {
+            FavoriteProductsScreen(onItemClick = { productId ->
+                navController.navigate(ProductDetailsDestination.route + "/$productId")
+            })
         }
     }
 }
